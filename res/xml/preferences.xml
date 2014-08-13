@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory
+            android:title="Camera Settings">
+       
+ 		<CheckBoxPreference
+                android:key="volume_down"
+                android:title="@string/volume_down" />
+ 		
+ 		<CheckBoxPreference
+                android:key="front_camera"
+                android:title="@string/front_camera" />
+ 		
+ 		<CheckBoxPreference
+                android:key="vibrate"
+                android:title="@string/vibrate" />
+ 		
+ 		<CheckBoxPreference
+                android:key="shutter"
+                android:title="@string/shutter" 
+                android:summary="If your phone is on silent the shutter sound will also be silent"/>
+ 		
+ 		<ListPreference android:key="flash_options"
+               	android:title="@string/flash_settings"
+			    android:entries="@array/flash_human_value"
+			    android:entryValues="@array/flash_phone_value"
+			    android:defaultValue="1"
+			    >
+		</ListPreference>
+
+ 		<ListPreference android:key="focus_options"
+               	android:title="@string/focus_settings"
+			    android:entries="@array/focus_human_value"
+			    android:entryValues="@array/focus_phone_value"
+			    android:defaultValue="2"
+			    >
+		</ListPreference>
+		
+ 		<CheckBoxPreference
+                android:key="custom_boolean"
+                android:title="@string/custom_res" />
+ 		
+ 		<EditTextPreference 
+ 		    android:key="custom_resolution"
+ 		    android:title="@string/resolution" 
+ 		    android:summary="@string/res_summary"
+ 		    android:dependency="custom_boolean"/>
+ 				
+ 		<Preference 
+ 		    android:key="reset"
+ 		    android:title="@string/reset"
+ 		    android:summary="Will reboot without warning on click!"/>
+    	    
+    </PreferenceCategory>
+ 
+</PreferenceScreen>         
