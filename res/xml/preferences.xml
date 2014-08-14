@@ -6,20 +6,23 @@
        
  		<CheckBoxPreference
                 android:key="volume_down"
-                android:title="@string/volume_down" />
+                android:title="@string/volume_down" 
+                android:summary="Volume Up by default"/>
  		
  		<CheckBoxPreference
                 android:key="front_camera"
-                android:title="@string/front_camera" />
+                android:title="@string/front_camera" 
+                android:summary="Experimental, don't expect it to work well"/>
  		
  		<CheckBoxPreference
                 android:key="vibrate"
-                android:title="@string/vibrate" />
+                android:title="@string/vibrate" 
+                android:summary="Enable vibration feedback"/>
  		
  		<CheckBoxPreference
                 android:key="shutter"
                 android:title="@string/shutter" 
-                android:summary="If your phone is on silent the shutter sound will also be silent"/>
+                android:summary="If your phone is on silent/vibrate the shutter sound will still be silent"/>
  		
  		<ListPreference android:key="flash_options"
                	android:title="@string/flash_settings"
@@ -34,6 +37,7 @@
 			    android:entries="@array/focus_human_value"
 			    android:entryValues="@array/focus_phone_value"
 			    android:defaultValue="2"
+			    android:summary="Aggressive may be slower but gets better focus"
 			    >
 		</ListPreference>
 		

@@ -68,7 +68,11 @@ public class Main implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 					} else if (images.isEmpty()){
 						break;
 					}
-					Toast.makeText(tv.getContext(), "Saving Images..", Toast.LENGTH_SHORT).show();
+					// set unqueued so the server can send more pics to service while we save these images
+					manager.clearImages();
+					manager.setQueued(false);
+					
+					Toast.makeText(tv.getContext(), "Saving Images", Toast.LENGTH_SHORT).show();
 					log("# of pics retrieved: " + images.size());
 					File myDir = null;
 					if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
@@ -80,13 +84,11 @@ public class Main implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 					}
 					for (byte[] b : images){
 						if (b != null && b.length > 0){
-							//create bitmap
+							//Flip image manually because camera settings weren't making a difference
 							Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-							//flip image 90 degrees because fuck you
 							Matrix matrix = new Matrix();
 							matrix.postRotate(90);
 							Bitmap newB = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-							//get bytearray back
 							ByteArrayOutputStream stream = new ByteArrayOutputStream();
 							newB.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 							b = stream.toByteArray();
@@ -108,8 +110,6 @@ public class Main implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 			        		XposedBridge.log("Picture saved to: " + myDir  + "/" + fname);
 						}
 					}
-					manager.clearImages();
-					manager.setQueued(false);
         		}
 				// Attempt to send broadcast to search for new pictures in gallery
 				Context c = tv.getContext();

@@ -39,7 +39,7 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XCallback;
 
 @SuppressLint("Wakelock")
-public class VolumeKeyListenerTakePic extends WorkSource  {
+public class VolumeKeyListenerTakePic {
 	private static boolean volumeDown, vibration, shutter, customBoolean, frontCam;
 	static String customValues = "";
 	static int height, width;
@@ -61,7 +61,6 @@ public class VolumeKeyListenerTakePic extends WorkSource  {
 	
 	static void init() {
 		updateVars();
-//		log("Using settings:\nVolumeDown: " + volumeDown + "\nShutter :" + shutter + "\nFlashMode: " + flashMode + "\nFocusMode: " + focusMode + "\nVibration: " + vibration);
 		try {
 			Class<?> classPhoneWindowManager = findClass("com.android.internal.policy.impl.PhoneWindowManager", null);
 			XposedBridge.hookAllConstructors(classPhoneWindowManager, handleConstructPhoneWindowManager);
@@ -106,7 +105,6 @@ public class VolumeKeyListenerTakePic extends WorkSource  {
 			mBroadcastWakeLock.acquire();
 			final boolean isScreenOn = (Boolean) param.args[2];
 			if (!isScreenOn) {
-				mHandler.removeCallbacks(mSendPictures);
 				final KeyEvent event = (KeyEvent) param.args[0];
 				final int keyCode = event.getKeyCode();
 				//Get context
@@ -114,13 +112,14 @@ public class VolumeKeyListenerTakePic extends WorkSource  {
 				// update settings variables
 				updateVars();
 				if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN  && volumeDown) 
-						|| (keyCode == KeyEvent.KEYCODE_VOLUME_UP && !volumeDown) || keyCode == KeyEvent.KEYCODE_CAMERA) {
+						|| (keyCode == KeyEvent.KEYCODE_VOLUME_UP && !volumeDown)
+						|| keyCode == KeyEvent.KEYCODE_CAMERA) {
 					if (event.getAction() == KeyEvent.ACTION_DOWN) {
 						mIsLongPress = false;
 						handleVolumeLongPress(param.thisObject);
 						param.setResult(0);
 						return;
-					} else {
+					} else {	
 						handleVolumeLongPressAbort(param.thisObject);
 						if (mIsLongPress) {
 							param.setResult(0);
@@ -185,7 +184,6 @@ public class VolumeKeyListenerTakePic extends WorkSource  {
 				@Override
 				public void run() {
 					mContext = (Context) getObjectField(param.thisObject, "mContext");
-					
 					mIsLongPress = true;
 					
 					//mute if necessary
@@ -250,28 +248,27 @@ public class VolumeKeyListenerTakePic extends WorkSource  {
 				}
 		        
 		        List<Size> supported = parameters.getSupportedPictureSizes();
-		        Double h;
-		        Double w;
-		        Size use = null;
+		        Double h, w;
+		        Size usableSize = null;
 		        /** find the ratio closest to h/w = 0.6 **//** The perfect ratio for my phone (HTC One S) h:832, w:1456 **/
 		        for(Size z : supported) {
 		        	h = (double) z.height;
 		        	w = (double) z.width;
-		        	if (use == null){
+		        	if (usableSize == null){
 			        	if (customBoolean){
 			        		if (z.height == height && z.width == width){
-			        			use = z;
+			        			usableSize = z;
 			        		}
 			        	} else {
 				        	if (0.60 >= (h/w)  && (h/w) >= 0.55 && h < 870){
-				        		use = z;
+				        		usableSize = z;
 				        	}
 			        	}
 		        	}
 		        }
-		        if (use != null){
-		        	log("Using picture size h:" + use.height + " w:" + use.width);
-		 	        parameters.setPictureSize(use.width, use.height);
+		        if (usableSize != null){
+		        	log("Using picture size h:" + usableSize.height + " w:" + usableSize.width);
+		 	        parameters.setPictureSize(usableSize.width, usableSize.height);
 		        } else {
 		        	log("No suitable size found, using default. Set a custom size or fix your custom setting");
 		        }
@@ -316,11 +313,9 @@ public class VolumeKeyListenerTakePic extends WorkSource  {
 	private  static ShutterCallback getShutterCallback(){
 		ShutterCallback shutterCallback = new ShutterCallback() {
 			public void onShutter() {
-				if (mContext != null){
-					if(vibration){
-						Vibrator vbService = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-						vbService.vibrate(150);
-					}
+				if (mContext != null && vibration){
+					Vibrator vbService = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+					vbService.vibrate(150);
 				}
 	        };
 		};

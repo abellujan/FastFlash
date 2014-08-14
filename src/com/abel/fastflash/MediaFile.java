@@ -1,5 +1,10 @@
 package com.abel.fastflash;
 
+/** 
+ * Not my code, I might use this to enable KitKat support but as it stands right now the newly implemented security
+ * in KitKat makes this mod useless and would need to be rewritten almost entirely.
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;

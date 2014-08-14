@@ -37,6 +37,17 @@ public class Settings extends Activity {
 			getPreferenceManager().setSharedPreferencesMode(MODE_WORLD_READABLE);
 			addPreferencesFromResource(R.xml.preferences);
 			
+			Preference customResolution = (Preference) findPreference("custom_boolean");
+			customResolution.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference p) {
+					XAServiceManager manager = XAServiceManager.getService();
+					manager.supported();
+					Toast.makeText(getActivity(), "Check the Xposed Log for supported sizes!", Toast.LENGTH_LONG).show();
+			        return true;
+				}
+			});
+			
 			/** RESET **/
 	        Preference reset = (Preference) findPreference("reset");
 			reset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -48,17 +59,6 @@ public class Settings extends Activity {
 						e.printStackTrace();
 					}
 					return true;
-				}
-			});
-			
-			Preference customResolution = (Preference) findPreference("custom_boolean");
-			customResolution.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference p) {
-					XAServiceManager manager = XAServiceManager.getService();
-					manager.supported();
-					Toast.makeText(getActivity(), "Check the Xposed Log for supported sizes!", Toast.LENGTH_LONG).show();
-			        return true;
 				}
 			});
 		}
