@@ -28,13 +28,15 @@ import com.android.server.XAService;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Main implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 	public static final String PACKAGE_NAME = Settings.class.getPackage().getName();
-	
+	public static XSharedPreferences prefs;
+	public static String path;
 	private static void log(String log) {
 		XposedBridge.log("FastFlash: " + log);
 	}
@@ -58,6 +60,12 @@ public class Main implements IXposedHookZygoteInit, IXposedHookLoadPackage {
             @SuppressWarnings("deprecation")
 			@Override
             protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
+            	prefs = new XSharedPreferences(PACKAGE_NAME);
+            	if (prefs.getBoolean("custom_path", false)){
+            		path = prefs.getString("custom_paths", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()) + "/FastFlash";
+            	} else {
+            		path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FastFlash";
+            	}
             	TextView tv = (TextView) param.thisObject;
             	XAServiceManager manager = XAServiceManager.getService();
             	while(true){
@@ -76,11 +84,14 @@ public class Main implements IXposedHookZygoteInit, IXposedHookLoadPackage {
 					log("# of pics retrieved: " + images.size());
 					File myDir = null;
 					if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
-						myDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FastFlash");
+						myDir = new File(path);
 		        		if (!myDir.exists())
 		        			myDir.mkdirs();
 					} else { //use alternate storage?
-						
+						log("Something is likely wrong!!");
+						myDir = new File(path);
+		        		if (!myDir.exists())
+		        			myDir.mkdirs();
 					}
 					for (byte[] b : images){
 						if (b != null && b.length > 0){

@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
-import android.os.WorkSource;
 import android.os.XAServiceManager;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
@@ -111,9 +110,10 @@ public class VolumeKeyListenerTakePic {
 				mContext = (Context) getObjectField(param.thisObject, "mContext");
 				// update settings variables
 				updateVars();
-				if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN  && volumeDown) 
+				//Tested on an optimus f6, and I was getting keycode 225 instead of 27 for the camera button so I added that check
+				if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN  && volumeDown)
 						|| (keyCode == KeyEvent.KEYCODE_VOLUME_UP && !volumeDown)
-						|| keyCode == KeyEvent.KEYCODE_CAMERA) {
+						|| keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == 225) {
 					if (event.getAction() == KeyEvent.ACTION_DOWN) {
 						mIsLongPress = false;
 						handleVolumeLongPress(param.thisObject);

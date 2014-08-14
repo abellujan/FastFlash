@@ -11,6 +11,8 @@
     <string name="reset">Soft Reset</string>
     <string name="resolution">Custom (Be careful)</string>
     <string name="custom_res">Set custom resolution</string>
+    <string name="custom_path">Use custom path</string>
+    <string name="custom_paths">Path</string>
     <string name="res_summary">Use this format: (H W) example(832 1456) \nMake sure to check the Xposed Log for supported resolutions
        and DO NOT set the resolution too high or you will likely break something! \nOptimal resolutions have a ratio of ~0.6</string>
     <string-array name="flash_human_value">
