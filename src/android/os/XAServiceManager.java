@@ -75,4 +75,24 @@ public final class XAServiceManager {
 			e.printStackTrace();
 		}
 	}
+
+	public boolean isRunning() {
+		// TODO Auto-generated method stub
+		try {
+			return mService.isRunning();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public void setRunning(boolean b) {
+		try {
+			mService.setRunning(b);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

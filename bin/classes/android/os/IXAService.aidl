@@ -10,4 +10,6 @@ interface IXAService {
 	void setQueued(boolean tf);
 	List getCamera();
 	void supported();
+	boolean isRunning();
+	void setRunning(boolean tf);
 }

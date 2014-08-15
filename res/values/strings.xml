@@ -2,16 +2,16 @@
 <resources>
     <string name="app_name">Fast Flash</string>
     <string name="action_settings">Settings</string>
-    <string name="volume_down">Use volume down</string>
-    <string name="front_camera">Use front camera</string>
-    <string name="flash_settings">Flash mode</string>
-    <string name="focus_settings">Focus mode</string>
+    <string name="volume_down">Use Volume Down</string>
+    <string name="front_camera">Use Front Camera</string>
+    <string name="flash_settings">Flash Mode</string>
+    <string name="focus_settings">Focus Mode</string>
     <string name="vibrate">Vibration</string>
     <string name="shutter">Shutter Sound</string>
     <string name="reset">Soft Reset</string>
     <string name="resolution">Custom (Be careful)</string>
-    <string name="custom_res">Set custom resolution</string>
-    <string name="custom_path">Use custom path</string>
+    <string name="custom_res">Set Custom Resolution</string>
+    <string name="custom_path">Use Custom Path</string>
     <string name="custom_paths">Path</string>
     <string name="res_summary">Use this format: (H W) example(832 1456) \nMake sure to check the Xposed Log for supported resolutions
        and DO NOT set the resolution too high or you will likely break something! \nOptimal resolutions have a ratio of ~0.6</string>

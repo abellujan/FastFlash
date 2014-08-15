@@ -18,6 +18,7 @@ public class XAService extends IXAService.Stub {
 	private static XAService oInstance;
 	final private static List<byte[]> images = new ArrayList<byte[]>();
 	boolean queued = false;
+	boolean running = false;
 	
 	public XAService(Context context) {
 		mContext = context;
@@ -98,5 +99,15 @@ public class XAService extends IXAService.Stub {
         }
         cam.release();
         cam = null;
+	}
+
+	@Override
+	public boolean isRunning() throws RemoteException {
+		return running;
+	}
+
+	@Override
+	public void setRunning(boolean tf) throws RemoteException {
+		running = tf;
 	}
 }

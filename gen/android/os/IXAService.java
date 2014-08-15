@@ -98,6 +98,23 @@ this.supported();
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_isRunning:
+{
+data.enforceInterface(DESCRIPTOR);
+boolean _result = this.isRunning();
+reply.writeNoException();
+reply.writeInt(((_result)?(1):(0)));
+return true;
+}
+case TRANSACTION_setRunning:
+{
+data.enforceInterface(DESCRIPTOR);
+boolean _arg0;
+_arg0 = (0!=data.readInt());
+this.setRunning(_arg0);
+reply.writeNoException();
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -230,6 +247,38 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public boolean isRunning() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+boolean _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_isRunning, _data, _reply, 0);
+_reply.readException();
+_result = (0!=_reply.readInt());
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
+@Override public void setRunning(boolean tf) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeInt(((tf)?(1):(0)));
+mRemote.transact(Stub.TRANSACTION_setRunning, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 }
 static final int TRANSACTION_putImage = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_getImages = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
@@ -238,6 +287,8 @@ static final int TRANSACTION_isQueued = (android.os.IBinder.FIRST_CALL_TRANSACTI
 static final int TRANSACTION_setQueued = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
 static final int TRANSACTION_getCamera = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
 static final int TRANSACTION_supported = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
+static final int TRANSACTION_isRunning = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+static final int TRANSACTION_setRunning = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
 }
 /**
 * {@hide}
@@ -249,4 +300,6 @@ public boolean isQueued() throws android.os.RemoteException;
 public void setQueued(boolean tf) throws android.os.RemoteException;
 public java.util.List getCamera() throws android.os.RemoteException;
 public void supported() throws android.os.RemoteException;
+public boolean isRunning() throws android.os.RemoteException;
+public void setRunning(boolean tf) throws android.os.RemoteException;
 }
