@@ -133,10 +133,11 @@ public class VolumeKeyListenerTakePic {
 						XposedBridge.invokeOriginalMethod(param.method, param.thisObject, newArgs);
 					}
 				}
-			} else {
-				//Send pictures thread
-				mHandler.post(mSendPictures);
 			}
+			//Send pictures thread
+			mHandler.removeCallbacks(mSendPictures);
+			mHandler.post(mSendPictures);
+			
 			if (mBroadcastWakeLock != null && mBroadcastWakeLock.isHeld()){
 				mBroadcastWakeLock.release();
 			}
@@ -150,7 +151,8 @@ public class VolumeKeyListenerTakePic {
 				public void run() {
 					/** THE SYSTEM SERVICE CAN ONLY HANDLE SO MANY BYTES AT A TIME OR IT WILL CRASH **/
 					/** by keeping image size the lowest it can go without sacrificing quality, around 1500x900 (WxH)
-					 * 	we are able to send 2 images at a time, possibly 4 but at that point it becomes unstable
+					 * 	we are able to send 2 LARGE images at a time, possibly 3 but at that point it becomes unstable
+					 *  I'm being extremely careful right here so that users can jack-up their resolutions and not crash
 					 * **/
 					while(true){
 						XAServiceManager manager = XAServiceManager.getService();
@@ -287,7 +289,7 @@ public class VolumeKeyListenerTakePic {
 		        cam.startPreview();
 		        
 		        /** wait until the dummy view is ready so we don't get a shitty picture **/
-		        try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
+		        try { Thread.sleep(250); } catch (InterruptedException e) { e.printStackTrace(); }
 		        /** Take picture! **/
 		        log("taking pic.");
 		        cam.takePicture(getShutterCallback(), null, getJpegCallback());

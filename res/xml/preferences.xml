@@ -12,7 +12,7 @@
  		<CheckBoxPreference
                 android:key="front_camera"
                 android:title="@string/front_camera" 
-                android:summary="Experimental, don't expect it to work well"/>
+                android:summary="Experimental!"/>
  		
  		<CheckBoxPreference
                 android:key="vibrate"
@@ -22,7 +22,7 @@
  		<CheckBoxPreference
                 android:key="shutter"
                 android:title="@string/shutter" 
-                android:summary="If your phone is on silent/vibrate the shutter sound will still be silent"/>
+                android:summary="If your phone is on silent/vibrate the shutter sound may still be silent"/>
  		
  		<ListPreference android:key="flash_options"
                	android:title="@string/flash_settings"
@@ -48,8 +48,7 @@
  		<EditTextPreference
  		    android:key="custom_paths"
  		    android:title="@string/custom_paths" 
- 		    android:summary="If pictures are saving somewhere you don't want, enter your custom path here.
- 		    Check a file explorer app for your desired path. ex: (/storage/external_SD/Pictures))"
+ 		    android:summary="If pictures are saving somewhere you don't want, enter your custom path here. Check a file explorer app for your desired path.\nex: (/storage/external_SD/Pictures))"
  		    android:dependency="custom_path"/>
  		
  		<CheckBoxPreference
