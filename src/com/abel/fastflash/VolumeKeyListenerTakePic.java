@@ -289,9 +289,13 @@ public class VolumeKeyListenerTakePic {
 		        cam.startPreview();
 		        
 		        /** wait until the dummy view is ready so we don't get a shitty picture **/
-		        try { Thread.sleep(250); } catch (InterruptedException e) { e.printStackTrace(); }
+		        try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
 		        /** Take picture! **/
 		        log("taking pic.");
+		        if (mContext != null && vibration){
+					Vibrator vbService = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+					vbService.vibrate(150);
+				}
 		        cam.takePicture(getShutterCallback(), null, getJpegCallback());
 			} else {
 				log("Failed to open camera");
@@ -338,7 +342,7 @@ public class VolumeKeyListenerTakePic {
 		mHandler.removeCallbacks(longPress);
 	}
 	
-	public static Camera getCameraInstance() {
+	private static Camera getCameraInstance() {
 		if (frontCam && Camera.getNumberOfCameras() > 1){
 			return Camera.open(1);
 		} else {

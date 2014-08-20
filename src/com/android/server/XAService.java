@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+import android.os.Handler;
 import android.os.RemoteException;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -19,6 +20,7 @@ public class XAService extends IXAService.Stub {
 	final private static List<byte[]> images = new ArrayList<byte[]>();
 	boolean queued = false;
 	boolean running = false;
+	Handler mHandler;
 	
 	public XAService(Context context) {
 		mContext = context;
@@ -27,6 +29,7 @@ public class XAService extends IXAService.Stub {
 	private void systemReady() {
 		// Make your initialization here
 		XposedBridge.log("Custom system service initialized");
+		mHandler = new Handler();
 	}
 	
 	public static void inject() {

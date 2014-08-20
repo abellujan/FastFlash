@@ -19,9 +19,8 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.XAServiceManager;
-import android.widget.Toast;
 
-class SaveImages extends Thread {
+class SaveImages implements Runnable {
 	public final String PACKAGE_NAME = Settings.class.getPackage().getName();
 	public XSharedPreferences prefs;
 	public String path;
@@ -40,39 +39,39 @@ class SaveImages extends Thread {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
-		//try to avoid duplicating thread
-		manager.setRunning(true);
-		mContext.getSystemService("savepictures.service");
 		prefs = new XSharedPreferences(PACKAGE_NAME);
     	if (prefs.getBoolean("custom_path", false)){
     		path = prefs.getString("custom_paths", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()) + "/FastFlash";
     	} else {
     		path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FastFlash";
     	}
-    	while(true){
+    	while (true) {
+			//mContext.getSystemService("savepictures.service");
 			List<byte[]> images = manager.getImages();
 			if (images == null){
 				log("service returned null");
+				manager.setRunning(false);
 				break;
 			} else if (images.isEmpty()){
+				manager.setRunning(false);
 				break;
 			}
+			
 			// set unqueued so the server can send more pics to service while we save these images
 			manager.clearImages();
 			manager.setQueued(false);
 			
-			Toast.makeText(mContext, "Saving Images", Toast.LENGTH_SHORT).show();
 			log("# of pics retrieved: " + images.size());
 			File myDir = null;
 			if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
 				myDir = new File(path);
-        		if (!myDir.exists())
-        			myDir.mkdirs();
+	    		if (!myDir.exists())
+	    			myDir.mkdirs();
 			} else { //use alternate storage?
 				log("Something is likely wrong!!");
 				myDir = new File(path);
-        		if (!myDir.exists())
-        			myDir.mkdirs();
+	    		if (!myDir.exists())
+	    			myDir.mkdirs();
 			}
 			for (byte[] b : images){
 				if (b != null && b.length > 0){
@@ -101,10 +100,9 @@ class SaveImages extends Thread {
 	        		}
 	        		XposedBridge.log("Picture saved to: " + myDir  + "/" + fname);
 	        		// Attempt to send broadcast to search for new pictures in gallery
-					mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+					mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + path)));
 				}
 			}
-		}
-    	manager.setRunning(false);
+    	}
 	}
 }

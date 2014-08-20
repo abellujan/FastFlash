@@ -7,18 +7,23 @@ package com.abel.fastflash;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import com.abel.fastflash.R;
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.XAServiceManager;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
 
 
-public class Settings extends Activity {
+public class Settings extends PreferenceActivity {
 
 	static String[] args = {"setprop ctl.restart surfaceflinger","setprop ctl.restart zygote"};
+	
+	@Override
+	protected boolean isValidFragment(String fragmentName) {
+	    return PrefsFragment.class.getName().equals(fragmentName);
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +33,7 @@ public class Settings extends Activity {
         if (savedInstanceState == null)
 			getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
 	}
-
+	
 	public static class PrefsFragment extends PreferenceFragment {
 		@SuppressWarnings("deprecation")
 		@Override
