@@ -6,9 +6,15 @@ package com.abel.fastflash;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.List;
+
 import com.abel.fastflash.R;
+
+
+import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
-import android.os.XAServiceManager;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -32,6 +38,9 @@ public class Settings extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
         if (savedInstanceState == null)
 			getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
+        
+        /*PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
+        root.addPreference(getListPreference());*/
 	}
 	
 	public static class PrefsFragment extends PreferenceFragment {
@@ -42,14 +51,24 @@ public class Settings extends PreferenceActivity {
 			getPreferenceManager().setSharedPreferencesMode(MODE_WORLD_READABLE);
 			addPreferencesFromResource(R.xml.preferences);
 			
+			/** Change to display supported values **/
 			Preference customResolution = (Preference) findPreference("custom_boolean");
 			customResolution.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference p) {
-					XAServiceManager manager = XAServiceManager.getService();
-					manager.supported();
-					Toast.makeText(getActivity(), "Check the Xposed Log for supported sizes!", Toast.LENGTH_LONG).show();
-			        return true;
+					Camera cam = Camera.open();
+					Camera.Parameters parameters = cam.getParameters();
+					List<Size> supported = parameters.getSupportedPictureSizes();
+			        Double h;
+			        Double w;
+			        for(Size z : supported) {
+			        	h = (double) z.height;
+			        	w = (double) z.width;
+			        	Toast.makeText(getActivity(), "H: " + h + " W: " + w, Toast.LENGTH_SHORT).show();
+			        }
+			        cam.release();
+			        cam = null;
+					return true;
 				}
 			});
 			
@@ -67,6 +86,11 @@ public class Settings extends PreferenceActivity {
 				}
 			});
 		}
+	}
+	
+	public ListPreference getListPreference(){
+		ListPreference lp = new ListPreference(getApplication().getApplicationContext());
+		return lp;
 	}
 	
 	public static void RunAsRoot(String[] cmds) throws IOException{

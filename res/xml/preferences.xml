@@ -48,7 +48,7 @@
  		<EditTextPreference
  		    android:key="custom_paths"
  		    android:title="@string/custom_paths" 
- 		    android:summary="If pictures are saving somewhere you don't want, enter your custom path here. Check a file explorer app for your desired path.\nex: (/storage/external_SD/Pictures))"
+ 		    android:summary="If pictures are saving somewhere you don't want, enter your custom path here. Check a file explorer app for your desired path.\nex: (/storage/external_SD/Pictures)"
  		    android:dependency="custom_path"/>
  		
  		<CheckBoxPreference
